@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Mathematics of diffusion maps – Diffusion Maps</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./exercises.html" rel="next">
+<link href="./practice.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6d144699ee5a3f285c99b12d480471d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mathematics.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematics of diffusion maps</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Diffusion Maps</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intuition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Understanding diffusion maps</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./practice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Diffusion maps in R and Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mathematics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematics of diffusion maps</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Diffusion maps exercises</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#from-distances-to-transition-probabilities" id="toc-from-distances-to-transition-probabilities" class="nav-link active" data-scroll-target="#from-distances-to-transition-probabilities"><span class="header-section-number">3.1</span> From distances to transition probabilities</a>
+  <ul class="collapse">
+  <li><a href="#pairwise-distance" id="toc-pairwise-distance" class="nav-link" data-scroll-target="#pairwise-distance"><span class="header-section-number">3.1.1</span> Pairwise distance</a></li>
+  <li><a href="#similarity-kernel" id="toc-similarity-kernel" class="nav-link" data-scroll-target="#similarity-kernel"><span class="header-section-number">3.1.2</span> Similarity kernel</a></li>
+  <li><a href="#local-graph" id="toc-local-graph" class="nav-link" data-scroll-target="#local-graph"><span class="header-section-number">3.1.3</span> Local graph</a></li>
+  <li><a href="#sampling-density" id="toc-sampling-density" class="nav-link" data-scroll-target="#sampling-density"><span class="header-section-number">3.1.4</span> Sampling density</a></li>
+  <li><a href="#density-normalization" id="toc-density-normalization" class="nav-link" data-scroll-target="#density-normalization"><span class="header-section-number">3.1.5</span> Density normalization</a></li>
+  <li><a href="#transition-matrix" id="toc-transition-matrix" class="nav-link" data-scroll-target="#transition-matrix"><span class="header-section-number">3.1.6</span> Transition matrix</a></li>
+  </ul></li>
+  <li><a href="#walking-for-several-steps" id="toc-walking-for-several-steps" class="nav-link" data-scroll-target="#walking-for-several-steps"><span class="header-section-number">3.2</span> Walking for several steps</a>
+  <ul class="collapse">
+  <li><a href="#two-steps" id="toc-two-steps" class="nav-link" data-scroll-target="#two-steps"><span class="header-section-number">3.2.1</span> Two steps</a></li>
+  <li><a href="#from-two-steps-to-t-steps" id="toc-from-two-steps-to-t-steps" class="nav-link" data-scroll-target="#from-two-steps-to-t-steps"><span class="header-section-number">3.2.2</span> From two steps to <span class="math inline">\(t\)</span> steps</a></li>
+  <li><a href="#where-diffusion-enters-the-construction" id="toc-where-diffusion-enters-the-construction" class="nav-link" data-scroll-target="#where-diffusion-enters-the-construction"><span class="header-section-number">3.2.3</span> Where diffusion enters the construction</a></li>
+  <li><a href="#endpoint-distributions" id="toc-endpoint-distributions" class="nav-link" data-scroll-target="#endpoint-distributions"><span class="header-section-number">3.2.4</span> Endpoint distributions</a></li>
+  <li><a href="#diffusion-time" id="toc-diffusion-time" class="nav-link" data-scroll-target="#diffusion-time"><span class="header-section-number">3.2.5</span> Diffusion time</a></li>
+  <li><a href="#stationary-distribution" id="toc-stationary-distribution" class="nav-link" data-scroll-target="#stationary-distribution"><span class="header-section-number">3.2.6</span> Stationary distribution</a></li>
+  </ul></li>
+  <li><a href="#diffusion-distance" id="toc-diffusion-distance" class="nav-link" data-scroll-target="#diffusion-distance"><span class="header-section-number">3.3</span> Diffusion distance</a></li>
+  <li><a href="#components-as-patterns-on-the-graph" id="toc-components-as-patterns-on-the-graph" class="nav-link" data-scroll-target="#components-as-patterns-on-the-graph"><span class="header-section-number">3.4</span> Components as patterns on the graph</a>
+  <ul class="collapse">
+  <li><a href="#why-right-eigenvectors-appear" id="toc-why-right-eigenvectors-appear" class="nav-link" data-scroll-target="#why-right-eigenvectors-appear"><span class="header-section-number">3.4.1</span> Why right eigenvectors appear</a></li>
+  <li><a href="#repeated-averaging" id="toc-repeated-averaging" class="nav-link" data-scroll-target="#repeated-averaging"><span class="header-section-number">3.4.2</span> Repeated averaging</a></li>
+  <li><a href="#constant-component" id="toc-constant-component" class="nav-link" data-scroll-target="#constant-component"><span class="header-section-number">3.4.3</span> Constant component</a></li>
+  <li><a href="#symmetric-form-used-for-computation" id="toc-symmetric-form-used-for-computation" class="nav-link" data-scroll-target="#symmetric-form-used-for-computation"><span class="header-section-number">3.4.4</span> Symmetric form used for computation</a></li>
+  </ul></li>
+  <li><a href="#from-endpoint-distributions-to-coordinates" id="toc-from-endpoint-distributions-to-coordinates" class="nav-link" data-scroll-target="#from-endpoint-distributions-to-coordinates"><span class="header-section-number">3.5</span> From endpoint distributions to coordinates</a>
+  <ul class="collapse">
+  <li><a href="#expansion-of-the-transition-matrix" id="toc-expansion-of-the-transition-matrix" class="nav-link" data-scroll-target="#expansion-of-the-transition-matrix"><span class="header-section-number">3.5.1</span> Expansion of the transition matrix</a></li>
+  <li><a href="#diffusion-distance-in-the-eigenvector-basis" id="toc-diffusion-distance-in-the-eigenvector-basis" class="nav-link" data-scroll-target="#diffusion-distance-in-the-eigenvector-basis"><span class="header-section-number">3.5.2</span> Diffusion distance in the eigenvector basis</a></li>
+  <li><a href="#diffusion-coordinates" id="toc-diffusion-coordinates" class="nav-link" data-scroll-target="#diffusion-coordinates"><span class="header-section-number">3.5.3</span> Diffusion coordinates</a></li>
+  </ul></li>
+  <li><a href="#using-a-finite-number-of-components" id="toc-using-a-finite-number-of-components" class="nav-link" data-scroll-target="#using-a-finite-number-of-components"><span class="header-section-number">3.6</span> Using a finite number of components</a>
+  <ul class="collapse">
+  <li><a href="#truncation" id="toc-truncation" class="nav-link" data-scroll-target="#truncation"><span class="header-section-number">3.6.1</span> Truncation</a></li>
+  <li><a href="#relative-weighting-across-components" id="toc-relative-weighting-across-components" class="nav-link" data-scroll-target="#relative-weighting-across-components"><span class="header-section-number">3.6.2</span> Relative weighting across components</a></li>
+  <li><a href="#when-a-fixed-diffusion-time-is-used" id="toc-when-a-fixed-diffusion-time-is-used" class="nav-link" data-scroll-target="#when-a-fixed-diffusion-time-is-used"><span class="header-section-number">3.6.3</span> When a fixed diffusion time is used</a></li>
+  </ul></li>
+  <li><a href="#effects-of-graph-construction" id="toc-effects-of-graph-construction" class="nav-link" data-scroll-target="#effects-of-graph-construction"><span class="header-section-number">3.7</span> Effects of graph construction</a>
+  <ul class="collapse">
+  <li><a href="#bandwidth-and-neighbor-count" id="toc-bandwidth-and-neighbor-count" class="nav-link" data-scroll-target="#bandwidth-and-neighbor-count"><span class="header-section-number">3.7.1</span> Bandwidth and neighbor count</a></li>
+  <li><a href="#density-normalization-1" id="toc-density-normalization-1" class="nav-link" data-scroll-target="#density-normalization-1"><span class="header-section-number">3.7.2</span> Density normalization</a></li>
+  </ul></li>
+  <li><a href="#extensions" id="toc-extensions" class="nav-link" data-scroll-target="#extensions"><span class="header-section-number">3.8</span> Extensions</a>
+  <ul class="collapse">
+  <li><a href="#continuous-limit" id="toc-continuous-limit" class="nav-link" data-scroll-target="#continuous-limit"><span class="header-section-number">3.8.1</span> Continuous limit</a></li>
+  <li><a href="#new-observations" id="toc-new-observations" class="nav-link" data-scroll-target="#new-observations"><span class="header-section-number">3.8.2</span> New observations</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Mathematics of diffusion maps</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>A diffusion map starts with pairwise distances and ends with coordinates that represent diffusion distance. The full coordinate set gives the distance exactly, while a truncated set gives an approximation. The construction has four parts:</p>
+<ol type="1">
+<li>Convert local distances into transition probabilities.</li>
+<li>Use powers of the transition matrix to describe walks of several steps.</li>
+<li>Compare the resulting endpoint distributions with diffusion distance.</li>
+<li>Express that distance with eigenvectors and eigenvalues.</li>
+</ol>
+<p>The same five observations are used throughout the derivation:</p>
+<p><span class="math display">\[x = (0, 1, 2, 4, 5).\]</span></p>
+<p>Observations 1, 2, and 3 form one close group. Observations 4 and 5 form another. The gap between observations 3 and 4 is 2, while the other adjacent gaps are 1. This uneven spacing provides a small example of two regions connected more weakly than observations within either region.</p>
+<section id="from-distances-to-transition-probabilities" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="from-distances-to-transition-probabilities"><span class="header-section-number">3.1</span> From distances to transition probabilities</h2>
+<section id="pairwise-distance" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="pairwise-distance"><span class="header-section-number">3.1.1</span> Pairwise distance</h3>
+<p>Let <span class="math inline">\(x_1,\ldots,x_n\)</span> be observations in <span class="math inline">\(p\)</span> dimensions. Their Euclidean distances are</p>
+<p><span class="math display">\[r_{ij} = \lVert x_i - x_j \rVert.\]</span></p>
+<p>Here <span class="math inline">\(n=5\)</span> and <span class="math inline">\(p=1\)</span>, so <span class="math inline">\(r_{ij}=|x_i-x_j|\)</span>. The distance matrix is</p>
+<p><span class="math display">\[r =
+\begin{pmatrix}
+0 &amp; 1 &amp; 2 &amp; 4 &amp; 5 \\
+1 &amp; 0 &amp; 1 &amp; 3 &amp; 4 \\
+2 &amp; 1 &amp; 0 &amp; 2 &amp; 3 \\
+4 &amp; 3 &amp; 2 &amp; 0 &amp; 1 \\
+5 &amp; 4 &amp; 3 &amp; 1 &amp; 0
+\end{pmatrix}.\]</span></p>
+<p>The construction treats short distances as reliable local comparisons. Long distances are not discarded because they are numerically wrong. They are given little direct influence because they do not describe how the observations between the two endpoints are connected.</p>
+</section>
+<section id="similarity-kernel" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="similarity-kernel"><span class="header-section-number">3.1.2</span> Similarity kernel</h3>
+<p>A Gaussian kernel converts distance into similarity:</p>
+<p><span class="math display">\[K_{ij} = \exp\!\left(-\frac{r_{ij}^2}{\epsilon}\right).\]</span></p>
+<p>The bandwidth <span class="math inline">\(\epsilon\)</span> controls how quickly similarity decreases. The numerical example uses <span class="math inline">\(\epsilon=2\)</span>. A distance of 0 gives similarity 1, a distance of 1 gives <span class="math inline">\(\exp(-1/2)=0.607\)</span>, and a distance of 5 gives about <span class="math inline">\(4\times10^{-6}\)</span>.</p>
+<p>The kernel matrix is</p>
+<p><span class="math display">\[K =
+\begin{pmatrix}
+1      &amp; 0.6065 &amp; 0.1353 &amp; 0.0003 &amp; 0.0000 \\
+0.6065 &amp; 1      &amp; 0.6065 &amp; 0.0111 &amp; 0.0003 \\
+0.1353 &amp; 0.6065 &amp; 1      &amp; 0.1353 &amp; 0.0111 \\
+0.0003 &amp; 0.0111 &amp; 0.1353 &amp; 1      &amp; 0.6065 \\
+0.0000 &amp; 0.0003 &amp; 0.0111 &amp; 0.6065 &amp; 1
+\end{pmatrix}.\]</span></p>
+<p>The direct similarities <span class="math inline">\(K_{13}\)</span> and <span class="math inline">\(K_{34}\)</span> are both 0.1353 because both pairs are separated by distance 2. The kernel alone does not distinguish a pair inside the first group from a pair that crosses the larger gap. That distinction will come from their connections to the other observations.</p>
+<p>Some software writes the denominator as <span class="math inline">\(2\sigma^2\)</span> instead of <span class="math inline">\(\epsilon\)</span>. These are two parameterizations of the same kernel.</p>
+</section>
+<section id="local-graph" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="local-graph"><span class="header-section-number">3.1.3</span> Local graph</h3>
+<p>Large datasets normally retain only the <span class="math inline">\(k\)</span> nearest neighbors of each observation. The graph is then symmetrized so that the retained connections can be treated consistently in both directions.</p>
+<p>The neighbor count and the bandwidth have different roles:</p>
+<ul>
+<li><span class="math inline">\(k\)</span> determines which edges exist.</li>
+<li><span class="math inline">\(\epsilon\)</span> determines the weight of an existing edge.</li>
+</ul>
+<p>The five observation example keeps the full kernel because every entry can be displayed. Chapter 2 uses sparse neighbor graphs for the larger simulated dataset.</p>
+</section>
+<section id="sampling-density" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="sampling-density"><span class="header-section-number">3.1.4</span> Sampling density</h3>
+<p>The row sum of the kernel is</p>
+<p><span class="math display">\[q_i = \sum_j K_{ij}.\]</span></p>
+<p>For the example,</p>
+<p><span class="math display">\[q = (1.742, 2.224, 1.888, 1.753, 1.618).\]</span></p>
+<p><span class="math inline">\(q_i\)</span> measures how much kernel similarity surrounds observation <span class="math inline">\(i\)</span>. Observation 2 has the largest value because it lies close to observations 1 and 3. Observation 5 has the smallest value because it has only one close neighbor.</p>
+<p>These row sums reflect both the shape of the data and how densely that shape was sampled. A densely sampled region can receive stronger total connectivity even when density is not the feature the analysis is intended to preserve.</p>
+</section>
+<section id="density-normalization" class="level3" data-number="3.1.5">
+<h3 data-number="3.1.5" class="anchored" data-anchor-id="density-normalization"><span class="header-section-number">3.1.5</span> Density normalization</h3>
+<p>Density normalization adjusts the kernel before it is turned into transition probabilities:</p>
+<p><span class="math display">\[K_{ij}^{(\alpha)} =
+\frac{K_{ij}}{q_i^\alpha q_j^\alpha}.\]</span></p>
+<p>The parameter <span class="math inline">\(\alpha\)</span> controls how much the original sampling density affects the final graph:</p>
+<ul>
+<li><span class="math inline">\(\alpha=0\)</span> leaves the kernel unchanged.</li>
+<li><span class="math inline">\(\alpha=1\)</span> applies the strongest correction among these common choices.</li>
+<li><span class="math inline">\(\alpha=1/2\)</span> gives an intermediate correction.</li>
+</ul>
+<p>No value is appropriate for every application. If density differences are technical, reducing their influence can help. If density is scientifically meaningful, a strong correction can remove relevant structure.</p>
+<p>Using <span class="math inline">\(\alpha=1/2\)</span> gives</p>
+<p><span class="math display">\[K^{(1/2)} =
+\begin{pmatrix}
+0.574 &amp; 0.308 &amp; 0.075 &amp; 0.000 &amp; 0.000 \\
+0.308 &amp; 0.450 &amp; 0.296 &amp; 0.006 &amp; 0.000 \\
+0.075 &amp; 0.296 &amp; 0.530 &amp; 0.074 &amp; 0.006 \\
+0.000 &amp; 0.006 &amp; 0.074 &amp; 0.570 &amp; 0.360 \\
+0.000 &amp; 0.000 &amp; 0.006 &amp; 0.360 &amp; 0.618
+\end{pmatrix}.\]</span></p>
+<p>Density normalization changes what the edge weights represent. A separate row normalization is still needed to turn those weights into probabilities.</p>
+</section>
+<section id="transition-matrix" class="level3" data-number="3.1.6">
+<h3 data-number="3.1.6" class="anchored" data-anchor-id="transition-matrix"><span class="header-section-number">3.1.6</span> Transition matrix</h3>
+<p>Let</p>
+<p><span class="math display">\[d_i = \sum_j K_{ij}^{(\alpha)}.\]</span></p>
+<p>Divide each row by its sum:</p>
+<p><span class="math display">\[P_{ij} = \frac{K_{ij}^{(\alpha)}}{d_i}.\]</span></p>
+<p>Every row now sums to 1:</p>
+<p><span class="math display">\[\sum_j P_{ij}
+= \frac{\sum_j K_{ij}^{(\alpha)}}{d_i}
+= 1.\]</span></p>
+<p><span class="math inline">\(P_{ij}\)</span> is the probability of moving from observation <span class="math inline">\(i\)</span> to observation <span class="math inline">\(j\)</span> in one step. The matrix <span class="math inline">\(P\)</span> is the transition matrix:</p>
+<p><span class="math display">\[P =
+\begin{pmatrix}
+0.600 &amp; 0.322 &amp; 0.078 &amp; 0.000 &amp; 0.000 \\
+0.291 &amp; 0.424 &amp; 0.279 &amp; 0.005 &amp; 0.000 \\
+0.076 &amp; 0.302 &amp; 0.540 &amp; 0.076 &amp; 0.007 \\
+0.000 &amp; 0.006 &amp; 0.074 &amp; 0.564 &amp; 0.356 \\
+0.000 &amp; 0.000 &amp; 0.007 &amp; 0.366 &amp; 0.628
+\end{pmatrix}.\]</span></p>
+<p>Row 3 shows the possible moves from observation 3. The walk remains at observation 3 with probability 0.540, moves to observation 2 with probability 0.302, and moves across the larger gap to observation 4 with probability 0.076.</p>
+<p><span class="math inline">\(P\)</span> can also act on a vector of values <span class="math inline">\(f=(f_1,\ldots,f_n)^\top\)</span> assigned to the observations:</p>
+<p><span class="math display">\[(Pf)_i = \sum_j P_{ij}f_j.\]</span></p>
+<p>Because the weights in row <span class="math inline">\(i\)</span> sum to 1, <span class="math inline">\((Pf)_i\)</span> is a weighted average of the values available from observation <span class="math inline">\(i\)</span>. This neighbor averaging interpretation will be used when eigenvectors are introduced.</p>
+</section>
+</section>
+<section id="walking-for-several-steps" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="walking-for-several-steps"><span class="header-section-number">3.2</span> Walking for several steps</h2>
+<section id="two-steps" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="two-steps"><span class="header-section-number">3.2.1</span> Two steps</h3>
+<p>To move from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span> in two steps, the walk must pass through an intermediate observation <span class="math inline">\(k\)</span>. The probability of the route <span class="math inline">\(i\to k\to j\)</span> is</p>
+<p><span class="math display">\[P_{ik}P_{kj}.\]</span></p>
+<p>Summing over every possible intermediate observation gives</p>
+<p><span class="math display">\[\sum_k P_{ik}P_{kj} = (P^2)_{ij}.\]</span></p>
+<p>For the route from observation 1 to observation 5,</p>
+<p><span class="math display">\[(P^2)_{1,5}
+= \sum_k P_{1k}P_{k5}
+= 0.000633.\]</span></p>
+<p>The one step probability <span class="math inline">\(P_{1,5}\)</span> rounds to zero in the displayed matrix. Two steps allow routes through intermediate observations and therefore give a larger probability.</p>
+</section>
+<section id="from-two-steps-to-t-steps" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="from-two-steps-to-t-steps"><span class="header-section-number">3.2.2</span> From two steps to <span class="math inline">\(t\)</span> steps</h3>
+<p>The same multiplication gives three steps, four steps, and any later number of steps:</p>
+<p><span class="math display">\[(P^t)_{ij}
+= \Pr(X_t=j\mid X_0=i).\]</span></p>
+<p>This entry sums the probabilities of every route of length <span class="math inline">\(t\)</span> from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>. It is not a shortest path calculation. Routes that pass through many well connected alternatives contribute more total probability than an isolated route.</p>
+</section>
+<section id="where-diffusion-enters-the-construction" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="where-diffusion-enters-the-construction"><span class="header-section-number">3.2.3</span> Where diffusion enters the construction</h3>
+<p>Constructing <span class="math inline">\(P\)</span> defines only one random walk step. The diffusion process is the repeated propagation of probability through</p>
+<p><span class="math display">\[P,\quad P^2,\quad P^3,\quad\ldots,\quad P^t,\]</span></p>
+<p>where <span class="math inline">\((P^t)_{ij}\)</span> is the probability of reaching observation <span class="math inline">\(j\)</span> after starting at observation <span class="math inline">\(i\)</span> and taking <span class="math inline">\(t\)</span> steps. The conceptual sequence is</p>
+<p><span class="math display">\[\text{local similarity}
+\longrightarrow
+\text{one step transition matrix}
+\longrightarrow
+\text{repeated propagation through }P^t
+\longrightarrow
+\text{diffusion distance}
+\longrightarrow
+\text{diffusion coordinates}.\]</span></p>
+<p>The eigendecomposition is not the diffusion. It represents repeated diffusion efficiently because</p>
+<p><span class="math display">\[P^t\psi_k=\lambda_k^t\psi_k.\]</span></p>
+<p>Plotting unweighted eigenvectors of <span class="math inline">\(P\)</span> gives a spectral embedding of the graph. A diffusion map additionally defines similarity through the <span class="math inline">\(t\)</span> step endpoint distributions and uses the coordinates</p>
+<p><span class="math display">\[\left(
+\lambda_1^t\psi_1(i),
+\lambda_2^t\psi_2(i),
+\ldots
+\right)\]</span></p>
+<p>to represent the corresponding diffusion distance.</p>
+<p>Diffusion occurs through repeated random walk propagation. The eigenvectors and eigenvalues provide a compact coordinate system for the resulting diffusion geometry.</p>
+</section>
+<section id="endpoint-distributions" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="endpoint-distributions"><span class="header-section-number">3.2.4</span> Endpoint distributions</h3>
+<p>For a fixed starting observation <span class="math inline">\(i\)</span>, the row <span class="math inline">\(P^t_{i,:}\)</span> is the distribution of possible endpoints after <span class="math inline">\(t\)</span> steps. The one step and five step matrices are</p>
+<p><span class="math display">\[P^1 =
+\begin{pmatrix}
+0.600 &amp; 0.322 &amp; 0.078 &amp; 0.000 &amp; 0.000 \\
+0.291 &amp; 0.424 &amp; 0.279 &amp; 0.005 &amp; 0.000 \\
+0.076 &amp; 0.302 &amp; 0.540 &amp; 0.076 &amp; 0.007 \\
+0.000 &amp; 0.006 &amp; 0.074 &amp; 0.564 &amp; 0.356 \\
+0.000 &amp; 0.000 &amp; 0.007 &amp; 0.366 &amp; 0.628
+\end{pmatrix},
+\qquad
+P^5 =
+\begin{pmatrix}
+0.333 &amp; 0.338 &amp; 0.265 &amp; 0.044 &amp; 0.021 \\
+0.306 &amp; 0.326 &amp; 0.271 &amp; 0.061 &amp; 0.036 \\
+0.258 &amp; 0.293 &amp; 0.263 &amp; 0.104 &amp; 0.081 \\
+0.042 &amp; 0.064 &amp; 0.101 &amp; 0.387 &amp; 0.406 \\
+0.020 &amp; 0.039 &amp; 0.081 &amp; 0.417 &amp; 0.444
+\end{pmatrix}.\]</span></p>
+<p>At <span class="math inline">\(t=1\)</span>, the rows remain strongly concentrated near their starting observations. At <span class="math inline">\(t=5\)</span>, rows 1, 2, and 3 have become more similar to one another. Rows 4 and 5 have also become more similar. The difference between the two groups remains because probability crosses the gap less readily than it moves within either group.</p>
+<p>Increasing diffusion time removes distinctions within strongly connected regions before it removes distinctions between weakly connected regions.</p>
+</section>
+<section id="diffusion-time" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="diffusion-time"><span class="header-section-number">3.2.5</span> Diffusion time</h3>
+<p>The number of steps <span class="math inline">\(t\)</span> is called diffusion time. It is a count of graph transitions, not elapsed experimental or biological time.</p>
+<p>Small values of <span class="math inline">\(t\)</span> retain local detail. Moderate values allow local differences to mix while broader connectivity patterns remain. Very large values eventually remove all information about the starting observation when the graph is connected and mixing.</p>
+<p>The value of <span class="math inline">\(t\)</span> appears in both <span class="math inline">\(P^t\)</span> and diffusion distance. Choosing one fixed <span class="math inline">\(t&gt;1\)</span> is not required by every software workflow. Packages often return eigenvectors and eigenvalues, which are enough to construct coordinates for any <span class="math inline">\(t\)</span>. A fixed value is most useful when an analysis needs geometry at a selected propagation scale.</p>
+</section>
+<section id="stationary-distribution" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="stationary-distribution"><span class="header-section-number">3.2.6</span> Stationary distribution</h3>
+<p>A probability distribution over the observations is written as a row vector <span class="math inline">\(\mu^\top\)</span>. After one step it becomes</p>
+<p><span class="math display">\[\mu^\top P,\]</span></p>
+<p>and after <span class="math inline">\(t\)</span> steps it becomes</p>
+<p><span class="math display">\[\mu^\top P^t.\]</span></p>
+<p>Starting at one observation is a special case. If <span class="math inline">\(e_i^\top\)</span> places all probability on observation <span class="math inline">\(i\)</span>, then</p>
+<p><span class="math display">\[e_i^\top P^t = P^t_{i,:}.\]</span></p>
+<p>This is why the rows of <span class="math inline">\(P^t\)</span> are endpoint distributions.</p>
+<p>A stationary distribution is a probability distribution that does not change after another step. It is written <span class="math inline">\(\pi^\top\)</span> and satisfies</p>
+<p><span class="math display">\[\pi^\top P = \pi^\top.\]</span></p>
+<p>For the graph construction used here, let</p>
+<p><span class="math display">\[Z=\sum_j d_j.\]</span></p>
+<p>The stationary probability of observation <span class="math inline">\(i\)</span> is</p>
+<p><span class="math display">\[\pi_i = \frac{d_i}{Z}.\]</span></p>
+<p>The reason is the symmetry of <span class="math inline">\(K^{(\alpha)}\)</span>. Since</p>
+<p><span class="math display">\[\begin{aligned}
+d_iP_{ij} &amp;= K_{ij}^{(\alpha)}, \\
+d_jP_{ji} &amp;= K_{ji}^{(\alpha)},
+\end{aligned}\]</span></p>
+<p>symmetry gives</p>
+<p><span class="math display">\[\pi_iP_{ij}
+= \frac{K_{ij}^{(\alpha)}}{Z}
+= \frac{K_{ji}^{(\alpha)}}{Z}
+= \pi_jP_{ji}.\]</span></p>
+<p>This equality is called <strong>detailed balance</strong>. At stationarity, the probability flow from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span> is balanced by the flow from <span class="math inline">\(j\)</span> to <span class="math inline">\(i\)</span>. Summing over <span class="math inline">\(i\)</span> gives</p>
+<p><span class="math display">\[\sum_i \pi_iP_{ij}=\pi_j,\]</span></p>
+<p>which is the stationary equation <span class="math inline">\(\pi^\top P=\pi^\top\)</span>.</p>
+<p>For the five observation example,</p>
+<p><span class="math display">\[\pi = (0.192, 0.212, 0.196, 0.202, 0.197).\]</span></p>
+<p>These values are close to uniform because the five row sums <span class="math inline">\(d_i\)</span> are similar. On a graph with more uneven connectivity, the stationary distribution places more mass in regions with larger <span class="math inline">\(d_i\)</span>.</p>
+<p>When the graph is connected and the walk is mixing, every initial distribution approaches <span class="math inline">\(\pi\)</span>. In this example, every row of <span class="math inline">\(P^{200}\)</span> agrees with <span class="math inline">\(\pi\)</span> to four decimal places. After that many steps, the endpoint distribution no longer records where the walk began.</p>
+<p>The transition matrix will now appear in two forms. The distinction explains why the stationary distribution is a left eigenvector while diffusion components are right eigenvectors.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Object acted on by <span class="math inline">\(P\)</span></th>
+<th>Operation</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Probability row <span class="math inline">\(\mu^\top\)</span></td>
+<td><span class="math inline">\(\mu^\top P\)</span></td>
+<td>Move probability forward by one step</td>
+</tr>
+<tr class="even">
+<td>Value pattern <span class="math inline">\(f\)</span></td>
+<td><span class="math inline">\(Pf\)</span></td>
+<td>Average future values over the possible next steps</td>
+</tr>
+</tbody>
+</table>
+<p>The stationary distribution satisfies <span class="math inline">\(\pi^\top P=\pi^\top\)</span>, so it is a <strong>left eigenvector</strong> with eigenvalue 1. A right eigenvector satisfies <span class="math inline">\(P\psi=\lambda\psi\)</span> and describes a value pattern over the observations. Reversibility, expressed by detailed balance, connects these two views.</p>
+<p>The stationary distribution is not a separate side calculation. It has two roles below. It gives the long run baseline used to compare endpoint probabilities, and it supplies the weights under which the right eigenvectors become orthogonal.</p>
+</section>
+</section>
+<section id="diffusion-distance" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="diffusion-distance"><span class="header-section-number">3.3</span> Diffusion distance</h2>
+<p>Two starting observations are similar in diffusion geometry when their endpoint distributions are similar. An unweighted comparison would be</p>
+<p><span class="math display">\[\sum_k \left(P^t_{ik}-P^t_{jk}\right)^2.\]</span></p>
+<p>This gives the same weight to every destination. Destinations with large stationary probability are visited often from many starting points, so a difference there carries less information about the start. Diffusion distance accounts for this baseline frequency by dividing the squared difference at destination <span class="math inline">\(k\)</span> by <span class="math inline">\(\pi_k\)</span>:</p>
+<p><span class="math display">\[\boxed{
+D_t^2(i,j)
+= \sum_k
+\frac{\left(P^t_{ik}-P^t_{jk}\right)^2}{\pi_k}.
+}\]</span></p>
+<p>The same absolute difference therefore counts less at a common destination with large <span class="math inline">\(\pi_k\)</span> and more at a less common destination with small <span class="math inline">\(\pi_k\)</span>. This adjustment matters most when the stationary distribution is uneven. In this example, <span class="math inline">\(\pi\)</span> is nearly uniform, so the weighting is close to a common rescaling.</p>
+<p>At <span class="math inline">\(t=1\)</span>,</p>
+<p><span class="math display">\[D_1(1,3)=1.596,
+\qquad
+D_1(3,4)=1.830,
+\qquad
+D_1(1,5)=2.247.\]</span></p>
+<p>The raw distances <span class="math inline">\(r_{13}\)</span> and <span class="math inline">\(r_{34}\)</span> are both 2. Their diffusion distances differ. Observations 1 and 3 lie within the same well connected region, while observations 3 and 4 lie on opposite sides of the weaker connection. Diffusion distance includes the surrounding routes, not only the direct distance between the pair.</p>
+<p><span class="math inline">\(D_t\)</span> depends on diffusion time. Changing <span class="math inline">\(t\)</span> changes the endpoint distributions and therefore changes the geometry being measured.</p>
+</section>
+<section id="components-as-patterns-on-the-graph" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="components-as-patterns-on-the-graph"><span class="header-section-number">3.4</span> Components as patterns on the graph</h2>
+<section id="why-right-eigenvectors-appear" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="why-right-eigenvectors-appear"><span class="header-section-number">3.4.1</span> Why right eigenvectors appear</h3>
+<p>The rows of <span class="math inline">\(P^t\)</span> describe how probability moves from each starting observation. Comparing those rows directly requires <span class="math inline">\(n\)</span> values for every start. The aim is to summarize their main differences with fewer numbers.</p>
+<p>To do this, consider a column vector <span class="math inline">\(f\)</span> that assigns one value to every observation. The <span class="math inline">\(i\)</span>th entry of <span class="math inline">\(Pf\)</span> is</p>
+<p><span class="math display">\[(Pf)_i
+= \sum_j P_{ij}f(j).\]</span></p>
+<p>This is the expected value of <span class="math inline">\(f\)</span> after one step when the walk starts at observation <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[(Pf)_i
+= \mathbb{E}\!\left[f(X_1)\mid X_0=i\right].\]</span></p>
+<p>Probability distributions move from the left as <span class="math inline">\(\mu^\top P\)</span>. Value patterns are evaluated from the right as <span class="math inline">\(Pf\)</span>. Diffusion components use the second operation because a component assigns a value to each observation.</p>
+<p>Now suppose that the value pattern is a right eigenvector <span class="math inline">\(\psi_\ell\)</span>:</p>
+<p><span class="math display">\[P\psi_\ell = \lambda_\ell\psi_\ell.\]</span></p>
+<p>For every starting observation <span class="math inline">\(i\)</span>, this means</p>
+<p><span class="math display">\[(P\psi_\ell)_i
+= \mathbb{E}\!\left[\psi_\ell(X_1)\mid X_0=i\right]
+= \lambda_\ell\psi_\ell(i).\]</span></p>
+<p>The neighbor average has the same pattern as <span class="math inline">\(\psi_\ell\)</span>, multiplied by <span class="math inline">\(\lambda_\ell\)</span>. If <span class="math inline">\(\lambda_\ell\)</span> is close to 1, one transition changes the pattern little. Strongly connected observations therefore tend to have similar component values.</p>
+<p>A pattern that alternates sharply between neighboring observations is changed substantially by averaging. It receives a smaller eigenvalue and loses influence more quickly under repeated diffusion.</p>
+<p>A right eigenvector is therefore useful for two related reasons. It assigns one coordinate value to each observation, and its evolution through repeated random walk steps is easy to calculate. A diffusion eigenvalue is not explained variance. It measures how strongly the corresponding graph pattern survives one transition step.</p>
+</section>
+<section id="repeated-averaging" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="repeated-averaging"><span class="header-section-number">3.4.2</span> Repeated averaging</h3>
+<p>Applying <span class="math inline">\(P\)</span> twice gives</p>
+<p><span class="math display">\[P^2\psi_\ell
+= P(P\psi_\ell)
+= P(\lambda_\ell\psi_\ell)
+= \lambda_\ell^2\psi_\ell.\]</span></p>
+<p>After <span class="math inline">\(t\)</span> steps,</p>
+<p><span class="math display">\[\boxed{
+P^t\psi_\ell = \lambda_\ell^t\psi_\ell.
+}\]</span></p>
+<p>For a walk starting at observation <span class="math inline">\(i\)</span>,</p>
+<p><span class="math display">\[\mathbb{E}\!\left[\psi_\ell(X_t)\mid X_0=i\right]
+= \lambda_\ell^t\psi_\ell(i).\]</span></p>
+<p>The starting value <span class="math inline">\(\psi_\ell(i)\)</span> tells us where observation <span class="math inline">\(i\)</span> lies on the pattern. The factor <span class="math inline">\(\lambda_\ell^t\)</span> tells us how much of that pattern remains after <span class="math inline">\(t\)</span> steps.</p>
+<p>Consider three illustrative eigenvalues:</p>
+<p><span class="math display">\[\lambda_1=0.98,
+\qquad
+\lambda_2=0.80,
+\qquad
+\lambda_3=0.25.\]</span></p>
+<p>Their powers are</p>
+<p><span class="math display">\[\begin{array}{c|ccc}
+t &amp; \lambda_1^t &amp; \lambda_2^t &amp; \lambda_3^t \\ \hline
+1  &amp; 0.980 &amp; 0.800 &amp; 0.250 \\
+5  &amp; 0.904 &amp; 0.328 &amp; 0.001 \\
+20 &amp; 0.668 &amp; 0.012 &amp; 0.000 \\
+50 &amp; 0.364 &amp; 0.00001 &amp; 0.000
+\end{array}\]</span></p>
+<p>The first pattern remains visible over many steps. The third is nearly absent by <span class="math inline">\(t=5\)</span>. This persistence determines the usual ordering of diffusion components. The first nontrivial components correspond to patterns that repeated diffusion removes most slowly. Later components can still represent meaningful structure, but they disappear faster.</p>
+</section>
+<section id="constant-component" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="constant-component"><span class="header-section-number">3.4.3</span> Constant component</h3>
+<p>Every row of <span class="math inline">\(P\)</span> sums to 1, so</p>
+<p><span class="math display">\[P\mathbf{1}=\mathbf{1}.\]</span></p>
+<p>The constant vector is therefore a right eigenvector with eigenvalue 1:</p>
+<p><span class="math display">\[\lambda_0=1,
+\qquad
+\psi_0=\mathbf{1}.\]</span></p>
+<p>It assigns the same value to every observation and cannot separate them. Diffusion embeddings omit this component.</p>
+<p>The constant right eigenvector and the stationary distribution have different roles. <span class="math inline">\(\mathbf{1}\)</span> is unchanged when <span class="math inline">\(P\)</span> acts on a pattern from the right. <span class="math inline">\(\pi^\top\)</span> is unchanged when a probability distribution acts on <span class="math inline">\(P\)</span> from the left:</p>
+<p><span class="math display">\[P\mathbf{1}=\mathbf{1},
+\qquad
+\pi^\top P=\pi^\top.\]</span></p>
+<p>Some software stores the constant component as column 0. The practical chapter shows this behavior in Scanpy.</p>
+<p>If the graph has several disconnected pieces, eigenvalue 1 occurs once for each piece. Several eigenvalues extremely close to 1 can indicate regions that communicate only weakly.</p>
+</section>
+<section id="symmetric-form-used-for-computation" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="symmetric-form-used-for-computation"><span class="header-section-number">3.4.4</span> Symmetric form used for computation</h3>
+<p><span class="math inline">\(P\)</span> is generally not symmetric, so its right eigenvectors need not be orthogonal under the ordinary Euclidean inner product. Detailed balance supplies a different inner product that matches the random walk:</p>
+<p><span class="math display">\[\langle f,g\rangle_\pi
+= \sum_i f(i)g(i)\pi_i.\]</span></p>
+<p>Under this weighted inner product, <span class="math inline">\(P\)</span> behaves like a symmetric operator:</p>
+<p><span class="math display">\[\langle f,Pg\rangle_\pi
+= \langle Pf,g\rangle_\pi.\]</span></p>
+<p>To see this, expand the left side and use detailed balance:</p>
+<p><span class="math display">\[\begin{aligned}
+\langle f,Pg\rangle_\pi
+&amp;= \sum_{i,j} f(i)P_{ij}g(j)\pi_i \\
+&amp;= \sum_{i,j} f(i)P_{ji}g(j)\pi_j \\
+&amp;= \langle Pf,g\rangle_\pi.
+\end{aligned}\]</span></p>
+<p>Right eigenvectors associated with different eigenvalues can therefore be chosen to be orthogonal under <span class="math inline">\(\langle\cdot,\cdot\rangle_\pi\)</span>.</p>
+<p>The same property can be expressed with an ordinary symmetric matrix. Define</p>
+<p><span class="math display">\[D_\alpha = \operatorname{diag}(d_1,\ldots,d_n)\]</span></p>
+<p>and the symmetric matrix</p>
+<p><span class="math display">\[S
+= D_\alpha^{-1/2}K^{(\alpha)}D_\alpha^{-1/2}.\]</span></p>
+<p><span class="math inline">\(S\)</span> and <span class="math inline">\(P\)</span> are related by</p>
+<p><span class="math display">\[S = D_\alpha^{1/2}PD_\alpha^{-1/2}.\]</span></p>
+<p>This is a similarity transformation, so <span class="math inline">\(S\)</span> and <span class="math inline">\(P\)</span> have the same eigenvalues. If <span class="math inline">\(\phi_\ell\)</span> is an eigenvector of <span class="math inline">\(S\)</span>, then <span class="math inline">\(D_\alpha^{-1/2}\phi_\ell\)</span> is a right eigenvector of <span class="math inline">\(P\)</span>.</p>
+<p>An eigenvector can be multiplied by any nonzero constant. If <span class="math inline">\(\phi_\ell\)</span> has ordinary Euclidean norm 1, the weighted normalized right eigenvector is</p>
+<p><span class="math display">\[\psi_\ell
+= \sqrt{Z}\,D_\alpha^{-1/2}\phi_\ell.\]</span></p>
+<p>This scale gives</p>
+<p><span class="math display">\[\langle\psi_\ell,\psi_m\rangle_\pi
+= \sum_i \psi_\ell(i)\psi_m(i)\pi_i
+= \delta_{\ell m}.\]</span></p>
+<p>The symmetric form is useful because numerical eigensolvers handle symmetric matrices reliably. It also explains why weighted orthogonality, rather than ordinary orthogonality, appears in the formulas for <span class="math inline">\(P\)</span>.</p>
+<p>The eigenvalues for the five observation example are</p>
+<p><span class="math display">\[\lambda = (1, 0.937, 0.493, 0.230, 0.096).\]</span></p>
+<p>The first nontrivial right eigenvector is approximately</p>
+<p><span class="math display">\[\psi_1
+= (-0.961,-0.862,-0.603,1.121,1.312)^\top.\]</span></p>
+<p>Observations 1, 2, and 3 have negative values, while observations 4 and 5 have positive values. The main change occurs across the weaker connection between observations 3 and 4. Its eigenvalue, 0.937, indicates that this distinction persists much longer than the patterns associated with 0.230 or 0.096.</p>
+</section>
+</section>
+<section id="from-endpoint-distributions-to-coordinates" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="from-endpoint-distributions-to-coordinates"><span class="header-section-number">3.5</span> From endpoint distributions to coordinates</h2>
+<section id="expansion-of-the-transition-matrix" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="expansion-of-the-transition-matrix"><span class="header-section-number">3.5.1</span> Expansion of the transition matrix</h3>
+<p>The eigenvector equation tells us how <span class="math inline">\(P^t\)</span> acts on one pattern. To recover the full transition matrix, we use all of the eigenvector patterns as a basis. Knowing how <span class="math inline">\(P^t\)</span> acts on every basis vector determines how it acts on any value pattern and therefore determines the matrix itself.</p>
+<p>The expansion uses three facts:</p>
+<ol type="1">
+<li>The right eigenvectors <span class="math inline">\(\psi_\ell\)</span> form a basis of value patterns on the observations.</li>
+<li>They are orthonormal under the stationary weights <span class="math inline">\(\pi\)</span>.</li>
+<li>Applying <span class="math inline">\(P^t\)</span> multiplies pattern <span class="math inline">\(\ell\)</span> by <span class="math inline">\(\lambda_\ell^t\)</span>.</li>
+</ol>
+<p>Let</p>
+<p><span class="math display">\[\Pi=\operatorname{diag}(\pi_1,\ldots,\pi_n).\]</span></p>
+<p>For each right eigenvector, define the row vector</p>
+<p><span class="math display">\[\chi_\ell^\top
+= \psi_\ell^\top\Pi.\]</span></p>
+<p>Weighted orthogonality gives</p>
+<p><span class="math display">\[\chi_\ell^\top\psi_m
+= \psi_\ell^\top\Pi\psi_m
+= \delta_{\ell m}.\]</span></p>
+<p>In matrix form, detailed balance is</p>
+<p><span class="math display">\[\Pi P=P^\top\Pi.\]</span></p>
+<p>It follows that</p>
+<p><span class="math display">\[\begin{aligned}
+\chi_\ell^\top P
+&amp;= \psi_\ell^\top\Pi P \\
+&amp;= \psi_\ell^\top P^\top\Pi \\
+&amp;= (P\psi_\ell)^\top\Pi \\
+&amp;= \lambda_\ell\psi_\ell^\top\Pi \\
+&amp;= \lambda_\ell\chi_\ell^\top.
+\end{aligned}\]</span></p>
+<p>Thus <span class="math inline">\(\chi_\ell^\top\)</span> is the left eigenvector paired with <span class="math inline">\(\psi_\ell\)</span>.</p>
+<p>Before expanding <span class="math inline">\(P^t\)</span>, consider any value pattern <span class="math inline">\(f\)</span>. Since the right eigenvectors form a basis, <span class="math inline">\(f\)</span> can be reconstructed from its coefficients in that basis:</p>
+<p><span class="math display">\[f
+= \sum_{\ell=0}^{n-1}
+\psi_\ell
+\left(\chi_\ell^\top f\right).\]</span></p>
+<p>The number <span class="math inline">\(\chi_\ell^\top f\)</span> is the coefficient of pattern <span class="math inline">\(\psi_\ell\)</span> in <span class="math inline">\(f\)</span>. Applying <span class="math inline">\(P^t\)</span> multiplies that coefficient by <span class="math inline">\(\lambda_\ell^t\)</span>:</p>
+<p><span class="math display">\[P^t f
+= \sum_{\ell=0}^{n-1}
+\lambda_\ell^t
+\psi_\ell
+\left(\chi_\ell^\top f\right).\]</span></p>
+<p>This equality holds for every <span class="math inline">\(f\)</span>, so the matrix itself is</p>
+<p><span class="math display">\[P^t
+= \sum_{\ell=0}^{n-1}
+\lambda_\ell^t
+\psi_\ell\chi_\ell^\top.\]</span></p>
+<p>Substituting <span class="math inline">\(\chi_\ell^\top=\psi_\ell^\top\Pi\)</span> gives</p>
+<p><span class="math display">\[P^t
+= \sum_{\ell=0}^{n-1}
+\lambda_\ell^t
+\psi_\ell\psi_\ell^\top\Pi.\]</span></p>
+<p>Taking entry <span class="math inline">\((i,k)\)</span> produces</p>
+<p><span class="math display">\[P^t_{ik}
+= \pi_k
+\sum_{\ell=0}^{n-1}
+\lambda_\ell^t
+\psi_\ell(i)\psi_\ell(k).\]</span></p>
+<p>The component with <span class="math inline">\(\ell=0\)</span> has <span class="math inline">\(\lambda_0=1\)</span> and <span class="math inline">\(\psi_0=\mathbf{1}\)</span>. Its contribution is <span class="math inline">\(\pi_k\)</span>. Separating it from the sum gives</p>
+<p><span class="math display">\[\boxed{
+P^t_{ik}
+= \pi_k
+\left[
+1 + \sum_{\ell\ge1}
+\lambda_\ell^t
+\psi_\ell(i)\psi_\ell(k)
+\right].
+}\]</span></p>
+<p>This formula describes the endpoint probability as a stationary baseline plus corrections that retain information about the starting observation. Pattern <span class="math inline">\(\ell\)</span> contributes through three factors:</p>
+<ul>
+<li><span class="math inline">\(\psi_\ell(i)\)</span> records the position of the starting observation on the pattern</li>
+<li><span class="math inline">\(\psi_\ell(k)\)</span> records the position of the destination on the same pattern</li>
+<li><span class="math inline">\(\lambda_\ell^t\)</span> records how much of the pattern remains after <span class="math inline">\(t\)</span> steps</li>
+</ul>
+<p>As <span class="math inline">\(t\)</span> increases, the nontrivial terms decay and only <span class="math inline">\(\pi_k\)</span> remains. This matches the earlier observation that every row of <span class="math inline">\(P^t\)</span> approaches the stationary distribution.</p>
+<p>For example, the probability of moving from observation 1 to observation 5 in three steps can be separated into the stationary term and four nontrivial terms:</p>
+<p><span class="math display">\[\begin{aligned}
+P^3_{1,5}
+&amp;= 0.197237
+- 0.204708
++ 0.012949
+- 0.001090
++ 0.000029 \\
+&amp;= 0.004416.
+\end{aligned}\]</span></p>
+<p>The first number is <span class="math inline">\(\pi_5\)</span>. The remaining numbers are the contributions of modes 1 through 4. Individual mode contributions can be positive or negative because an eigenvector can place the start and destination on the same side or on opposite sides of a pattern. Their sum is the transition probability. Using all four nontrivial eigenpairs reconstructs <span class="math inline">\(P^3\)</span> to within <span class="math inline">\(4\times10^{-15}\)</span> of direct matrix multiplication.</p>
+</section>
+<section id="diffusion-distance-in-the-eigenvector-basis" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="diffusion-distance-in-the-eigenvector-basis"><span class="header-section-number">3.5.2</span> Diffusion distance in the eigenvector basis</h3>
+<p>Subtract the expansion for starting observation <span class="math inline">\(j\)</span> from the expansion for <span class="math inline">\(i\)</span>. The shared stationary term cancels:</p>
+<p><span class="math display">\[P^t_{ik}-P^t_{jk}
+= \pi_k
+\sum_{\ell\ge1}
+\lambda_\ell^t
+\left[\psi_\ell(i)-\psi_\ell(j)\right]
+\psi_\ell(k).\]</span></p>
+<p>For shorter notation, define</p>
+<p><span class="math display">\[a_\ell
+= \lambda_\ell^t
+\left[\psi_\ell(i)-\psi_\ell(j)\right].\]</span></p>
+<p>The difference between the two endpoint probabilities is then</p>
+<p><span class="math display">\[P^t_{ik}-P^t_{jk}
+= \pi_k\sum_{\ell\ge1}a_\ell\psi_\ell(k).\]</span></p>
+<p>Substitute this expression into diffusion distance:</p>
+<p><span class="math display">\[\begin{aligned}
+D_t^2(i,j)
+&amp;= \sum_k
+\frac{\left(P^t_{ik}-P^t_{jk}\right)^2}{\pi_k} \\
+&amp;= \sum_k \pi_k
+\left[
+\sum_{\ell\ge1}a_\ell\psi_\ell(k)
+\right]^2 \\
+&amp;= \sum_{\ell,m\ge1}
+a_\ell a_m
+\sum_k \pi_k\psi_\ell(k)\psi_m(k).
+\end{aligned}\]</span></p>
+<p>The last sum is <span class="math inline">\(\delta_{\ell m}\)</span> because the eigenvectors are orthonormal under the stationary weights. Terms with <span class="math inline">\(\ell\ne m\)</span> vanish, leaving</p>
+<p><span class="math display">\[D_t^2(i,j)
+= \sum_{\ell\ge1}a_\ell^2.\]</span></p>
+<p>Replacing <span class="math inline">\(a_\ell\)</span> with its definition gives</p>
+<p><span class="math display">\[\boxed{
+D_t^2(i,j)
+= \sum_{\ell\ge1}
+\lambda_\ell^{2t}
+\left[\psi_\ell(i)-\psi_\ell(j)\right]^2.
+}\]</span></p>
+<p>The difference <span class="math inline">\(\psi_\ell(i)-\psi_\ell(j)\)</span> measures how far apart the observations are on pattern <span class="math inline">\(\ell\)</span>. The factor <span class="math inline">\(\lambda_\ell^{2t}\)</span> determines how much that pattern contributes at diffusion time <span class="math inline">\(t\)</span>. The formula contains no cross terms because weighted orthogonality separates the component contributions.</p>
+<p>For the example, this expression reproduces the distances calculated directly from the rows of <span class="math inline">\(P\)</span> to within <span class="math inline">\(4\times10^{-15}\)</span>.</p>
+</section>
+<section id="diffusion-coordinates" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="diffusion-coordinates"><span class="header-section-number">3.5.3</span> Diffusion coordinates</h3>
+<p>Define the diffusion map at time <span class="math inline">\(t\)</span> by</p>
+<p><span class="math display">\[\boxed{
+\Phi_t(i)
+= \left(
+\lambda_1^t\psi_1(i),
+\lambda_2^t\psi_2(i),
+\ldots
+\right).
+}\]</span></p>
+<p>The squared Euclidean distance between two coordinate vectors is</p>
+<p><span class="math display">\[\begin{aligned}
+\lVert\Phi_t(i)-\Phi_t(j)\rVert^2
+&amp;= \sum_{\ell\ge1}
+\lambda_\ell^{2t}
+\left[\psi_\ell(i)-\psi_\ell(j)\right]^2 \\
+&amp;= D_t^2(i,j).
+\end{aligned}\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[\boxed{
+D_t(i,j)
+= \lVert\Phi_t(i)-\Phi_t(j)\rVert.
+}\]</span></p>
+<p>With all <span class="math inline">\(n-1\)</span> nontrivial components, this equality is exact. Keeping fewer components gives an approximation. For the five observation example, all four nontrivial coordinates reproduce the directly calculated diffusion distances to numerical precision.</p>
+</section>
+</section>
+<section id="using-a-finite-number-of-components" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="using-a-finite-number-of-components"><span class="header-section-number">3.6</span> Using a finite number of components</h2>
+<section id="truncation" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="truncation"><span class="header-section-number">3.6.1</span> Truncation</h3>
+<p>Using the first <span class="math inline">\(m\)</span> nontrivial components gives</p>
+<p><span class="math display">\[\Phi_t^{(m)}(i)
+= \left(
+\lambda_1^t\psi_1(i),
+\ldots,
+\lambda_m^t\psi_m(i)
+\right).\]</span></p>
+<p>The omitted part of the squared diffusion distance is</p>
+<p><span class="math display">\[\sum_{\ell&gt;m}
+\lambda_\ell^{2t}
+\left[\psi_\ell(i)-\psi_\ell(j)\right]^2.\]</span></p>
+<p>For observations 1 and 5 at <span class="math inline">\(t=1\)</span>, the full squared distance is</p>
+<p><span class="math display">\[D_1^2(1,5)=5.049.\]</span></p>
+<p>The first component contributes 4.538. Components 2 through 4 contribute the remaining 0.511. One component therefore preserves most of this particular distance, but not all diffusion distances need have the same concentration in DC1.</p>
+<p>Larger <span class="math inline">\(t\)</span> suppresses components with smaller eigenvalues more strongly. This reduces truncation error when only early components are kept, but it also removes the finer structure represented by the omitted components. Later components should not be treated as noise solely because their eigenvalues are smaller.</p>
+</section>
+<section id="relative-weighting-across-components" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="relative-weighting-across-components"><span class="header-section-number">3.6.2</span> Relative weighting across components</h3>
+<p>Multiplying one component by a constant does not change the ordering of observations on that component. For example,</p>
+<p><span class="math display">\[\begin{pmatrix}-2\\-1\\0\\1\\2\end{pmatrix}
+\quad\text{and}\quad
+0.5
+\begin{pmatrix}-2\\-1\\0\\1\\2\end{pmatrix}\]</span></p>
+<p>describe the same pattern in one dimension at different scales.</p>
+<p>Diffusion time matters when several components are used together. Each component is multiplied by a different factor <span class="math inline">\(\lambda_\ell^t\)</span>. Using</p>
+<p><span class="math display">\[\lambda_1=0.98,
+\qquad
+\lambda_2=0.80,
+\qquad
+\lambda_3=0.30,\]</span></p>
+<p>at <span class="math inline">\(t=5\)</span> gives</p>
+<p><span class="math display">\[\lambda_1^5=0.90392,
+\qquad
+\lambda_2^5=0.32768,
+\qquad
+\lambda_3^5=0.00243.\]</span></p>
+<p>The third component then contributes very little to a multidimensional distance compared with the first. Increasing <span class="math inline">\(t\)</span> changes the relative weighting of the axes even though it does not reorder observations within an individual axis.</p>
+<p><a href="#fig-eigenvalue-power-decay" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> shows this effect for the first three eigenvalues of the simulated dataset.</p>
+<div class="visual-card">
+<div id="fig-eigenvalue-power-decay" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three curves decay toward zero as diffusion time increases. Components with smaller eigenvalues decay faster.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eigenvalue-power-decay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/12-eigenvalue-power-decay.svg" class="img-fluid figure-img" alt="Three curves decay toward zero as diffusion time increases. Components with smaller eigenvalues decay faster.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eigenvalue-power-decay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: The first three diffusion eigenvalues raised to increasing powers of <span class="math inline">\(t\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Plots can hide this change when each panel chooses its own axis limits. <a href="intuition.html#fig-effect-of-t-fixed-axes" class="quarto-xref">Figure&nbsp;<span>1.12</span></a> uses fixed limits and reveals the contraction. <a href="intuition.html#fig-effect-of-t-rescaled-axes" class="quarto-xref">Figure&nbsp;<span>1.13</span></a> uses separate limits and makes the same coordinates look more similar.</p>
+</section>
+<section id="when-a-fixed-diffusion-time-is-used" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="when-a-fixed-diffusion-time-is-used"><span class="header-section-number">3.6.3</span> When a fixed diffusion time is used</h3>
+<p>Many packages return <span class="math inline">\(\psi_\ell\)</span> and <span class="math inline">\(\lambda_\ell\)</span> rather than requiring the analyst to choose <span class="math inline">\(t\)</span>. These outputs define coordinates for any diffusion time:</p>
+<p><span class="math display">\[\mathrm{DC}_\ell^{(t)}
+= \lambda_\ell^t\psi_\ell.\]</span></p>
+<p>A fixed <span class="math inline">\(t&gt;1\)</span> is useful when the downstream analysis needs a particular propagation scale. Changing <span class="math inline">\(t\)</span> changes Euclidean distances across the weighted coordinates. It can therefore affect clustering, nearest neighbor calculations, and other geometric analyses.</p>
+<p>Many workflows instead use the eigenvectors and eigenvalues directly or use trajectory methods that combine diffusion information across scales. Selecting a fixed <span class="math inline">\(t&gt;1\)</span> is not a mandatory step. At very large <span class="math inline">\(t\)</span>, every nontrivial term <span class="math inline">\(\lambda_\ell^t\)</span> approaches zero on a connected mixing graph, and the starting observations become indistinguishable.</p>
+</section>
+</section>
+<section id="effects-of-graph-construction" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="effects-of-graph-construction"><span class="header-section-number">3.7</span> Effects of graph construction</h2>
+<section id="bandwidth-and-neighbor-count" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="bandwidth-and-neighbor-count"><span class="header-section-number">3.7.1</span> Bandwidth and neighbor count</h3>
+<p>The bandwidth and neighbor count affect different parts of the graph:</p>
+<ul>
+<li>A small bandwidth makes edge weights decay quickly.</li>
+<li>A large bandwidth gives more similar weights to near and moderately distant neighbors.</li>
+<li>A small neighbor count can fragment the graph.</li>
+<li>A large neighbor count can introduce shortcuts across the structure.</li>
+</ul>
+<p>If the graph is disconnected, eigenvalue 1 appears more than once. If it is nearly disconnected, several eigenvalues can lie very close to 1. This is why an accumulation of near 1 eigenvalues can signal weak communication between graph regions rather than several useful biological processes.</p>
+<p>An adaptive bandwidth uses a separate local scale for each observation. It can help when sampling density varies enough that one global bandwidth does not fit all regions. <code>destiny</code> uses a local bandwidth by default. Scanpy exposes different graph construction methods, as shown in Chapter 2.</p>
+</section>
+<section id="density-normalization-1" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="density-normalization-1"><span class="header-section-number">3.7.2</span> Density normalization</h3>
+<p>The parameter <span class="math inline">\(\alpha\)</span> acts before row normalization:</p>
+<p><span class="math display">\[K_{ij}^{(\alpha)}
+= \frac{K_{ij}}{q_i^\alpha q_j^\alpha}.\]</span></p>
+<p>It controls how strongly local sampling density affects the final geometry. This choice cannot be made from the equations alone. It depends on whether density variation represents sampling bias, biological occupancy, or another feature of the data.</p>
+</section>
+</section>
+<section id="extensions" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="extensions"><span class="header-section-number">3.8</span> Extensions</h2>
+<section id="continuous-limit" class="level3" data-number="3.8.1">
+<h3 data-number="3.8.1" class="anchored" data-anchor-id="continuous-limit"><span class="header-section-number">3.8.1</span> Continuous limit</h3>
+<p>The finite graph construction has a continuous counterpart. On a smooth manifold, diffusion is described by an operator of Laplace type. Under suitable assumptions about the kernel and sampling, the graph operator converges to a continuous diffusion operator as the number of observations grows.</p>
+<p>The eigenfunctions of the continuous operator play the same role as the graph eigenvectors. Slowly decaying eigenfunctions describe broad structure, while rapidly decaying eigenfunctions describe finer variation. A proof of this convergence requires analysis beyond the finite matrix derivation used here.</p>
+</section>
+<section id="new-observations" class="level3" data-number="3.8.2">
+<h3 data-number="3.8.2" class="anchored" data-anchor-id="new-observations"><span class="header-section-number">3.8.2</span> New observations</h3>
+<p>A diffusion map can be fitted on a reference dataset and extended to new observations. The new observation is connected to the reference data with the same kernel. Its coordinates are then estimated from those similarities and the existing eigenpairs.</p>
+<p>This procedure is called a Nyström extension. It avoids recomputing the full eigendecomposition, although implementation support differs across packages.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./practice.html" class="pagination-link" aria-label="Diffusion maps in R and Python">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Diffusion maps in R and Python</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./exercises.html" class="pagination-link" aria-label="Diffusion maps exercises">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Diffusion maps exercises</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
